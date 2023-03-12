@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+  echo "Usage: $(basename $0) input_file"
+  exit 1
+fi
+
+input_file=$1
+
+audio_track=$(ffprobe -v error -select_streams a -show_entries stream=index "$input_file" | grep "index=" | cut -d'=' -f2 | tr '\n' ' ')
+
+if [ -z "$audio_track" ]; then
+  echo "No audio track found in $input_file"
+  exit 1
+fi
+
+echo -n "Found audio track $audio_track in $input_file.\n"
+
+read -p "Enter the audio track: " audio_track
+read -p "Enter the output file name: " output_file
+
+ffmpeg -i "$input_file" -map "0:$audio_track" -c:a copy "$output_file"
