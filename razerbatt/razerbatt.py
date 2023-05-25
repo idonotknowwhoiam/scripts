@@ -10,7 +10,7 @@ for device in device_manager.devices:
 	   desired_device = device
 	else:
 	   print('not found')
-	   exit
+	   exit()
 
 is_charging = ''
 if desired_device.is_charging:
